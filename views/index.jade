@@ -1,0 +1,26 @@
+extends layout
+
+block content
+     .container.mt-5
+      .row
+        .col-md-6.offset-md-3
+          .card
+            .card-body
+              form(action="/" method="POST")
+                .mb-3
+                  label(for="title") Title
+                .mb-3 
+                  input(type="text" id="title" name="title")
+                .mb-3
+                  label(for="note") Note
+                .mb-3
+                  textarea(id="note" name="note")
+                .mb-3
+                  label(for="tags") Tags
+                .mb-3
+                  input(id="tags" name="tags")
+                .mb-3
+                  label(for="source") Source
+                .mb-3
+                  input(id="source" name="source")
+                button(type="submit" class="btn btn-primary") Submit
