@@ -38,7 +38,7 @@ function syncRepo() {
 }
 
 function publish(data) {
-  return execShellCommand(`git -C git/ add -A && git -C git/ commit -m ${data.title} && git -C git/ push`);
+  return execShellCommand(`git -C git/ add -A && git -C git/ commit -m "${data.title}" && git -C git/ push`);
 }
 
 function formatTags(tags) {
@@ -73,7 +73,9 @@ function writeNoteToFile(data) {
 
   const output = formatOutput(data, DRAFT_MODE);
 
-  fs.writeFileSync(`${folder}/${data.title}.md`, output);
+  const formattedTitle = data.title.replace(/\s+/g, '-');
+  
+  fs.writeFileSync(`${folder}/${formattedTitle}.md`, output);
 }
 
 function applyLeadingZero(dateOrMonth) {
