@@ -1,26 +1,64 @@
-extends layout
-
-block content
-     .container.mt-5
+doctype html
+html
+  head
+    title Hugo note taker
+    // Materialize CSS
+    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css')
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    style.
+      textarea.materialize-textarea, input[type="text"], input[type="url"] {
+        height: 50px; /* Standard height for better mobile interaction */
+        font-size: 1.2rem; /* Larger font size for easier readability on mobile */
+      }
+      .input-field input[type=text]:focus, .input-field textarea:focus, .input-field input[type=url]:focus {
+        border-bottom: 2px solid #26a69a;
+        box-shadow: none;
+      }
+      .btn-large {
+        width: 100%; /* Full width buttons for easier tapping */
+        padding: 0 25px; /* Ample padding for better appearance */
+      }
+      .container {
+        padding: 0; /* Remove padding to use full width */
+        max-width: 100%; /* Ensure it fills the width on small screens */
+      }
+      .header {
+        font-size: 1.5rem; /* Large font size for header */
+        color: #2c3e50; /* Deep shade of blue for text color */
+        padding: 20px 0; /* Top and bottom padding for better visual separation */
+        text-align: center; /* Center-align the text */
+      }
+  body
+    .container
       .row
-        .col-md-6.offset-md-3
+        .col.s12
           .card
-            .card-body
+            .card-content
+              .header Add a note
               form(action="/" method="POST")
-                .mb-3
-                  label(for="title") Title
-                .mb-3 
-                  input(type="text" id="title" name="title")
-                .mb-3
-                  label(for="note") Note
-                .mb-3
-                  textarea(id="note" name="note")
-                .mb-3
-                  label(for="tags") Tags
-                .mb-3
-                  input(id="tags" name="tags")
-                .mb-3
-                  label(for="source") Source
-                .mb-3
-                  input(id="source" name="source")
-                button(type="submit" class="btn btn-primary") Submit
+                .row
+                  .input-field.col.s12
+                    input(id="title" type="text" name="title" class="validate")
+                    label(for="title") Title
+                .row
+                  .input-field.col.s12
+                    textarea(id="note" name="note" class="materialize-textarea")
+                    label(for="note") Note
+                .row
+                  .input-field.col.s12
+                    input(id="tags" type="text" name="tags" class="validate")
+                    label(for="tags") Tags
+                .row
+                  .input-field.col.s12
+                    input(id="source" type="url" name="source" class="validate")
+                    label(for="source") Source
+                .row
+                  .col.s12
+                    button(type="submit" class="btn-large waves-effect waves-light teal lighten-1") Submit
+                  
+    // Materialize JavaScript for component initialization
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js')
