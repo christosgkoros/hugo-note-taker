@@ -2,7 +2,7 @@ const fs = require('fs');
 const { execShellCommand } = require('./execShellCommand');
 const config = require("../config");
 
-async function initGitRepo() {
+async function init() {
 
   if (!fs.existsSync("git/")) {
     fs.mkdirSync("git/", { recursive: true }, (err) => {
@@ -15,4 +15,12 @@ async function initGitRepo() {
   }
 }
 
-exports.initGitRepo = initGitRepo;
+function sync() {
+  execShellCommand("git -C git/ pull -v");
+}
+
+function publish(data) {
+  return execShellCommand(`git -C git/ add -A && git -C git/ commit -m "${data.title}" && git -C git/ push`);
+}
+
+module.exports = {init, sync, publish}
