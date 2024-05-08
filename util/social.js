@@ -13,7 +13,7 @@ function postToMastodon(data){
   
     const status = `${note}
   
-  ${config.hugo_host}/notes/${datePath}/${formattedTitle}`;
+  ${config.hugo_host}/notes/${datePath}/${formattedTitle}/`;
   
     const urlencoded = new URLSearchParams();
     urlencoded.append("status", status );

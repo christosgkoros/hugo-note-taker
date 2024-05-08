@@ -1,7 +1,8 @@
 function formatTitle(title) {
-  title.replace(/\s+/g, '-'); //Replace whitespaces with -
-  title.replace(/'/g, ''); //Remove '
-  return title;
+  let formattedTitle = title
+    .replace(/\s+/g, '-') //Replace whitespaces with -
+    .replace(/'/g, ''); //Remove '
+  return formattedTitle;
 }
 
 function applyLeadingZero(dateOrMonth) {
