@@ -1,16 +1,11 @@
 const config = require ('../config')
 const { createDatePath, formatTitle } = require('./formatting')
-const Headers = require('node-fetch').Headers;
 
 function post(data){
     postToMastodon(data);
   }
   
 function postToMastodon(data){
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-    myHeaders.append("Authorization", `Bearer ${config.mastodon_token}`);
-  
     const datePath = createDatePath(data.date);
     const formattedTitle = formatTitle(data.title);
     
@@ -25,7 +20,10 @@ function postToMastodon(data){
   
     const requestOptions = {
       method: "POST",
-      headers: myHeaders,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": `Bearer ${config.mastodon_token}`
+      },
       body: urlencoded,
       redirect: "follow"
     };
