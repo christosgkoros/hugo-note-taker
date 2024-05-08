@@ -1,5 +1,6 @@
 const config = require ('../config')
 const { createDatePath, formatTitle } = require('./formatting')
+const Headers = require('node-fetch').Headers;
 
 function post(data){
     postToMastodon(data);
