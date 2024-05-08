@@ -29,10 +29,7 @@ router.post('/', isAuthenticated, (req, res) => {
 
   writeNoteToFile(data);
   publish(data);
-
-  if (!config.hugo_draft_mode) {
-    post(data);
-  }
+  post(data);
 
   res.render('success');
 

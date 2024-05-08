@@ -8,12 +8,12 @@ function formatOutput(data, isDraft) {
   date = "${data.date.toISOString()}"
   tags = [ ${data.tags} ]
   draft = "${isDraft}"
-  +++
-  ${data.note}
++++
+${data.note}
   
-  ${data.source}
-  `;
-  }
+${data.source}
+`;
+}
 
 function writeNoteToFile(data) {
 
