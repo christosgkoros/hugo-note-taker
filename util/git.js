@@ -9,7 +9,7 @@ async function init() {
       if (err) throw err;
     });
 
-    await execShellCommand(`git config --global user.email "${config.git_email}" && git config --global user.name "${config.git_name}"`);
+    await execShellCommand(`git config --global http.sslVerify false &&git config --global user.email "${config.git_email}" && git config --global user.name "${config.git_name}"`);
 
     await execShellCommand(`git clone http://${config.github_user}:${config.github_token}@github.com/${config.github_repo} git/ -4`);
   }
