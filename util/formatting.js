@@ -1,7 +1,8 @@
 function formatTitle(title) {
   let formattedTitle = title
     .replace(/\s+/g, '-') //Replace whitespaces with -
-    .replace(/'/g, ''); //Remove '
+    .replace(/'/g, '')
+    .toLowerCase(); //Remove '
   return formattedTitle;
 }
 
