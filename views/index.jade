@@ -42,19 +42,19 @@ html
               form(action="/" method="POST")
                 .row
                   .input-field.col.s12
-                    input(id="title" type="text" name="title" class="validate")
+                    input(id="title" type="text" name="title" class="validate" value="#{title}")
                     label(for="title") Title
                 .row
                   .input-field.col.s12
-                    textarea(id="note" name="note" class="materialize-textarea")
+                    <textarea id="note" name="note" class="materialize-textarea" required=true>#{note}</textarea>
                     label(for="note") Note
                 .row
                   .input-field.col.s12
-                    input(id="tags" type="text" name="tags" class="validate")
+                    input(id="tags" type="text" name="tags" class="validate" value="#{tags}")
                     label(for="tags") Tags
                 .row
                   .input-field.col.s12
-                    input(id="source" type="url" name="source" class="validate")
+                    input(id="source" type="url" name="source" class="validate" value="#{source}")
                     label(for="source") Source
                 .row
                   .col.s12

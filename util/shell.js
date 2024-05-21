@@ -19,4 +19,4 @@ async function execShellCommand(command) {
   });
 }
 
-exports.execShellCommand = execShellCommand;
+module.exports = execShellCommand;

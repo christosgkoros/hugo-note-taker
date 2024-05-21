@@ -14,7 +14,9 @@ const config = {
     hugo_host: process.env.HUGO_HOST,
     hugo_draft_mode : process.env.DRAFT_MODE,
     mastodon_host: process.env.MASTODON_HOST,
-    mastodon_token: process.env.MASTODON_TOKEN
+    mastodon_token: process.env.MASTODON_TOKEN,
+    openai_token: process.env.OPENAI_TOKEN,
+    openai_model: process.env.OPENAI_MODEL
 }
 
 module.exports = config;

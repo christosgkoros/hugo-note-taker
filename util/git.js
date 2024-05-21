@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { execShellCommand } = require('./execShellCommand');
+const execShellCommand = require('./shell');
 const config = require("../config");
 
 async function init() {
