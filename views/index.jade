@@ -39,6 +39,8 @@ html
           .card
             .card-content
               .header Add a note
+              if error
+                .card-panel.red.lighten-4.red-text.text-darken-4= error
               form(action="/" method="POST")
                 .row
                   .input-field.col.s12

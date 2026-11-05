@@ -1,28 +1,41 @@
 const { OpenAI }  = require("openai");
 const config = require('../config')
 
+const SCHEMA = {
+  type: "object",
+  properties: {
+    title: { type: "string" },
+    tags: { type: "array", items: { type: "string" } }
+  },
+  required: ["title", "tags"],
+  additionalProperties: false
+};
+
 async function populateWithAI(data) {
-  
+
   const openai = new OpenAI({
     apiKey: config.openai_token,
   });
 
-  if (data.title === "") {
-    const chatCompletion = await openai.chat.completions.create({
-      messages: [{ role: "user", content: `For the following note, write a proper title for a blog that deals with apis, software and working in tech. Keep it as simple as possible with no more than 4 words, do not use verbs and respond only with the title without double or single quotes. The tile should contribute to SEO\\n ${data.note}`}],
-      model: config.openai_model
-    });
-    data.title = chatCompletion.choices[0].message.content;
-    console.log(data.title);
-  }
+  // One call returns both; only the fields the user left empty are used
+  const chatCompletion = await openai.chat.completions.create({
+    messages: [{ role: "user", content: `For the following note for a blog that deals with apis, software and working in tech:
+- title: write a proper title. Keep it as simple as possible with no more than 4 words, do not use verbs and do not wrap it in quotes. The title should contribute to SEO
+- tags: write a list of tags, for example apis, leadership, ai. Keep it as simple as possible with no more than 4 tags, each a single lowercase word
 
+${data.note}`}],
+    model: config.openai_model,
+    reasoning_effort: "none", //short titles and tags don't need reasoning
+    response_format: { type: "json_schema", json_schema: { name: "note_metadata", strict: true, schema: SCHEMA } }
+  });
+  const result = JSON.parse(chatCompletion.choices[0].message.content);
+  console.log(result);
+
+  if (data.title === "") {
+    data.title = result.title;
+  }
   if (data.tags === "") {
-    const chatCompletion = await openai.chat.completions.create({
-      messages: [{ role: "user", content: `For the following note, write a list of tags for a blog, for example apis, leadership, ai. Keep it simple as possible with no more than 4 tags and respond only with the tags separated by whitespace\\n ${data.note}`}],
-      model: config.openai_model
-    });
-    data.tags = chatCompletion.choices[0].message.content;
-    console.log(data.tags);
+    data.tags = result.tags.join(" ");
   }
 
   return data;

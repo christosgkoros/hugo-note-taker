@@ -1,8 +1,9 @@
 function formatTitle(title) {
   let formattedTitle = title
-    .replace(/\s+/g, '-') //Replace whitespaces with -
-    .replace(/'/g, '')
-    .toLowerCase(); //Remove '
+    .toLowerCase()
+    .replace(/'/g, '') //Remove '
+    .replace(/[^\p{L}\p{N}]+/gu, '-') //Replace whitespace and symbols (incl. / and .) with -
+    .replace(/^-+|-+$/g, ''); //Trim leading and trailing -
   return formattedTitle;
 }
 
@@ -23,16 +24,7 @@ function createDatePath(date) {
 }
 
 function formatTags(tags) {
-  let tagsArray = tags.split(' ');
-  let formattedTags = "";
-  for (let i = 0; i < tagsArray.length; i++) {
-    if (i !== tagsArray.length - 1) {
-      formattedTags += `"${tagsArray[i]}",`;
-    } else {
-      formattedTags += `"${tagsArray[i]}"`;
-    }
-  }
-  return formattedTags;
+  return tags.split(/\s+/).filter(tag => tag !== "");
 }
 
 module.exports = {formatTitle, applyLeadingZero, createDatePath, formatTags};

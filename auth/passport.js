@@ -10,7 +10,7 @@ passport.use(new GoogleStrategy({
   function(accessToken, refreshToken, profile, cb) {
     // Here, you would ideally lookup or save the profile information to your database
     if(profile._json.email !== config.google_user_email) {
-      throw new Error("invalid user");
+      return cb(null, false);
     }
     return cb(null, profile);
   }

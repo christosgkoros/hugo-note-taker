@@ -1,16 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const { isAuthenticated } = require('../auth/isAuthenticated');
-const config = require('../config');
-const { formatTags } = require('../util/formatting');
-const writeNoteToFile = require('../util/hugo');
-const {sync, publish} = require('../util/git');
+const publishNote = require('../util/hugo');
 const post = require('../util/social');
 const populateWithAI = require('../util/ai');
 
 /* GET home page. */
 router.get('/', isAuthenticated, function(req, res, next) {
-  sync();
   res.render('index', {title:"",note:"",tags:"", source:""});
 });
 
@@ -33,12 +29,20 @@ router.post('/', isAuthenticated, async (req, res) => {
     res.render('index', data);
   }
   else if ( data.title === "" || data.tags === "") {
-    const autoFilledData = await populateWithAI(data);
-    res.render('index', autoFilledData);
+    try {
+      const autoFilledData = await populateWithAI(data);
+      res.render('index', autoFilledData);
+    } catch (error) {
+      console.error(error);
+      res.render('index', { ...data, error: `Could not generate title/tags: ${error.message}` });
+    }
   } else {
-    data.tags = formatTags(req.body.tags);
-    writeNoteToFile(data);
-    publish(data);
+    try {
+      await publishNote(data);
+    } catch (error) {
+      console.error(error);
+      return res.render('index', { ...data, error: `Could not publish note: ${error.message}` });
+    }
     post(data);
     res.render('success');
   }

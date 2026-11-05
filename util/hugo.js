@@ -1,38 +1,33 @@
-const {createDatePath, formatTitle} = require('./formatting');
+const {createDatePath, formatTitle, formatTags} = require('./formatting');
 const config = require('../config');
-const fs = require('fs');
+const { commitFile } = require('./github');
 
+// JSON strings and string arrays are valid TOML values and escape quotes, backslashes and newlines
 function formatOutput(data, isDraft) {
-    return `+++ 
-  title = "${data.title}"
-  date = "${data.date.toISOString()}"
-  tags = [ ${data.tags} ]
-  draft = "${isDraft}"
+    return `+++
+  title = ${JSON.stringify(data.title)}
+  date = ${JSON.stringify(data.date.toISOString())}
+  tags = ${JSON.stringify(formatTags(data.tags))}
+  draft = ${isDraft}
 +++
 ${data.note}
-  
+
 ${data.source}
 `;
 }
 
-function writeNoteToFile(data) {
+async function publishNote(data) {
 
-    const NOTES_LOCATION = "git/content/notes";
-    const DRAFT_MODE = config.hugo_draft_mode;
-    
+    const NOTES_LOCATION = "content/notes";
+    const DRAFT_MODE = config.hugo_draft_mode === "true";
+
     const datePath = createDatePath(data.date);
-    
-    const folder = `${NOTES_LOCATION}/${datePath}`;
-  
-    fs.mkdirSync(folder, { recursive: true }, (err) => {
-      if (err) throw err;
-    });
-  
+
     const output = formatOutput(data, DRAFT_MODE);
-  
+
     const formattedTitle = formatTitle(data.title);
-    
-    fs.writeFileSync(`${folder}/${formattedTitle}.md`, output);
+
+    return commitFile(`${NOTES_LOCATION}/${datePath}/${formattedTitle}.md`, output, data.title);
 }
 
-module.exports = writeNoteToFile;
+module.exports = publishNote;

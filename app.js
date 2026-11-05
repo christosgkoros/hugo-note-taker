@@ -6,7 +6,6 @@ const logger = require('morgan');
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
-const { init } = require('./util/git');
 const session = require('express-session');
 
 const passport = require('passport');
@@ -53,7 +52,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-init();
 
 module.exports = app;
