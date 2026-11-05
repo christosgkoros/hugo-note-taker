@@ -1,6 +1,13 @@
 const config = require('../config');
 
-const API = `https://api.github.com/repos/${config.github_repo}/contents`;
+// Accept owner/repo, owner/repo.git or a full github.com URL
+const REPO = (config.github_repo || "")
+  .trim()
+  .replace(/^(https?:\/\/)?github\.com\//, '')
+  .replace(/\.git$/, '')
+  .replace(/\/+$/, '');
+
+const API = `https://api.github.com/repos/${REPO}/contents`;
 
 function headers() {
   return {
