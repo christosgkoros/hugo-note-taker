@@ -15,6 +15,8 @@ const config = {
     mastodon_host: process.env.MASTODON_HOST,
     mastodon_token: process.env.MASTODON_TOKEN,
     openai_token: process.env.OPENAI_TOKEN,
+    ai_gateway_url: process.env.AI_GATEWAY_URL, //e.g. https://<team>.dp.fabricgateway.ai/openai/v1
+    ai_gateway_key: process.env.AI_GATEWAY_KEY, //sent on the fg-api-key header
     openai_model: "gpt-6-luna"
 }
 

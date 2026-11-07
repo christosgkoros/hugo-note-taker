@@ -13,7 +13,12 @@ const SCHEMA = {
 
 async function populateWithAI(data) {
 
-  const openai = new OpenAI({
+  // Route through the AI gateway when configured; it holds the OpenAI key, so no bearer token is sent
+  const openai = config.ai_gateway_url ? new OpenAI({
+    baseURL: config.ai_gateway_url,
+    apiKey: config.ai_gateway_key, //required by the SDK, removed below
+    defaultHeaders: { "fg-api-key": config.ai_gateway_key, "Authorization": null }
+  }) : new OpenAI({
     apiKey: config.openai_token,
   });
 
