@@ -1,66 +1,51 @@
-doctype html
-html
-  head
-    title Hugo note taker
-    // Materialize CSS
-    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css')
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-    meta(name='viewport' content='width=device-width, initial-scale=1.0')
-    style.
-      textarea.materialize-textarea, input[type="text"], input[type="url"] {
-        height: 50px; /* Standard height for better mobile interaction */
-        font-size: 1.2rem; /* Larger font size for easier readability on mobile */
-      }
-      .input-field input[type=text]:focus, .input-field textarea:focus, .input-field input[type=url]:focus {
-        border-bottom: 2px solid #26a69a;
-        box-shadow: none;
-      }
-      .btn-large {
-        width: 100%; /* Full width buttons for easier tapping */
-        padding: 0 25px; /* Ample padding for better appearance */
-      }
-      .container {
-        padding: 0; /* Remove padding to use full width */
-        max-width: 100%; /* Ensure it fills the width on small screens */
-      }
-      .header {
-        font-size: 1.5rem; /* Large font size for header */
-        color: #2c3e50; /* Deep shade of blue for text color */
-        padding: 20px 0; /* Top and bottom padding for better visual separation */
-        text-align: center; /* Center-align the text */
-      }
-  body
-    .container
-      .row
-        .col.s12
-          .card
-            .card-content
-              .header Add a note
-              if error
-                .card-panel.red.lighten-4.red-text.text-darken-4= error
-              form(action="/" method="POST")
-                .row
-                  .input-field.col.s12
-                    input(id="title" type="text" name="title" class="validate" value="#{title}")
-                    label(for="title") Title
-                .row
-                  .input-field.col.s12
-                    <textarea id="note" name="note" class="materialize-textarea" required=true>#{note}</textarea>
-                    label(for="note") Note
-                .row
-                  .input-field.col.s12
-                    input(id="tags" type="text" name="tags" class="validate" value="#{tags}")
-                    label(for="tags") Tags
-                .row
-                  .input-field.col.s12
-                    input(id="source" type="url" name="source" class="validate" value="#{source}")
-                    label(for="source") Source
-                .row
-                  .col.s12
-                    button(type="submit" class="btn-large waves-effect waves-light teal lighten-1") Submit
-                  
-    // Materialize JavaScript for component initialization
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js')
+extends layout
+
+block content
+  form.composer(action="/" method="POST" data-composer)
+    .composer-head
+      h1 New note
+      if suggested
+        p.muted Review the suggestions, edit anything you like, then publish.
+      else
+        p.muted Leave the title or tags empty and AI will suggest them.
+
+    if error
+      .alert(role="alert")= error
+
+    .field
+      label(for="note") Note
+      textarea#note(name="note" rows="6" required placeholder="What's on your mind?" autofocus=!note)= note
+      .field-meta
+        span(data-count) #{note ? note.length : 0} characters
+        if mastodon
+          span.muted(data-mastodon hidden) Mastodon shows the first 447
+
+    .field
+      label(for="source") Source
+        span.optional optional
+      input#source(type="url" name="source" value=source placeholder="https://" inputmode="url" autocomplete="off")
+
+    .field-row
+      .field
+        label(for="title") Title
+          if suggested
+            span.badge AI
+        input#title(type="text" name="title" value=title placeholder="Suggested by AI if empty" autocomplete="off")
+      .field
+        label(for="tags") Tags
+          if suggested
+            span.badge AI
+        input#tags(type="text" name="tags" value=tags placeholder="apis leadership ai" autocomplete="off" autocapitalize="none")
+        .chips(data-chips aria-hidden="true")
+
+    .composer-actions
+      button.button.button-primary(type="submit" data-submit)
+        span.spinner(aria-hidden="true")
+        span(data-label)= (title && tags) ? 'Publish' : 'Suggest title & tags'
+      span.hint.muted
+        kbd ⌘
+        kbd ↵
+        |  to submit
+
+block scripts
+  script(src="/javascripts/composer.js" defer)

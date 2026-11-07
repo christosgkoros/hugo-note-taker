@@ -1,6 +1,11 @@
 extends layout
 
 block content
-  h1= message
-  h2= error.status
-  pre #{error.stack}
+  section.done
+    .done-icon.done-icon-error(aria-hidden="true") !
+    h1= status === 404 ? 'Page not found' : 'Something went wrong'
+    p.muted= message
+    .done-actions
+      a.button.button-primary(href="/") Back to notes
+    if error.stack
+      pre.stack= error.stack

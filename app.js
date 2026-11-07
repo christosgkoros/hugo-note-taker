@@ -13,6 +13,7 @@ require('./auth/passport');
 const config = require('./config');
 
 const app = express();
+app.set('trust proxy', 1); //Cloud Run terminates TLS in front of the app
 
 //auth
 app.use(session({
@@ -22,6 +23,11 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  res.locals.mastodon = Boolean(config.mastodon_host);
+  next();
+});
 
 
 // view engine setup
@@ -47,6 +53,7 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.status = err.status || 500;
 
   // render the error page
   res.status(err.status || 500);

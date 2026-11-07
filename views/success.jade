@@ -1,5 +1,21 @@
 extends layout
 
 block content
-    h1 Success!
-    p #{results}
+  section.done
+    .done-icon(aria-hidden="true")
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+    if draft
+      h1 Saved as a draft
+    else
+      h1 Published
+    p.done-title= published.title
+    ul.done-list
+      li Committed to the blog repository
+      if mastodon
+        li Posting to Mastodon
+    .done-actions
+      a.button.button-primary(href="/") Write another note
+      if postUrl && !draft
+        a.button(href=postUrl target="_blank" rel="noopener") View post
+    if postUrl && !draft
+      p.fineprint The post appears once the site finishes building.

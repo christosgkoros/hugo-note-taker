@@ -5,7 +5,8 @@ const config = require('../config');
 passport.use(new GoogleStrategy({
     clientID: config.google_client_id,
     clientSecret: config.google_client_secret,
-    callbackURL: "/auth/google/callback"
+    callbackURL: "/auth/google/callback",
+    proxy: true //build the callback URL from X-Forwarded-Proto so it stays https behind Cloud Run
   },
   function(accessToken, refreshToken, profile, cb) {
     // Here, you would ideally lookup or save the profile information to your database
@@ -16,13 +17,15 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-// Serialize user into the sessions
+// Keep just what the UI shows in the session
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, {
+    id: user.id,
+    email: user._json.email,
+    photo: user._json.picture
+  });
 });
 
-// Deserialize user from the sessions
-passport.deserializeUser((id, done) => {
-
-  done(null, id); // Simplified for example purposes
+passport.deserializeUser((user, done) => {
+  done(null, user);
 });
